@@ -2,7 +2,7 @@ const formElem = document.querySelector('.feedback-form')
 
 const STORAGE_KEY = 'feedback-form-state';
 
-let formState = {
+let formData = {
     email: "",
     message: "",
 };
@@ -11,8 +11,8 @@ const saveData = localStorage.getItem(STORAGE_KEY);
 
 if (saveData) {
     try {
-        formState = {
-            ...formState, ...JSON.parse(saveData)
+        formData = {
+            ...formData, ...JSON.parse(saveData)
         };
     } catch (error) {
             console.error('Пошкоджені дані у localStorage:', error);
@@ -20,14 +20,14 @@ if (saveData) {
         }
     }
 
-formElem.elements.email.value = formState.email;
-formElem.elements.message.value = formState.message;
+formElem.elements.email.value = formData.email;
+formElem.elements.message.value = formData.message;
 
 formElem.addEventListener('input', e => {
     const { name, value } = e.target;
 
-    formState[name] = value.trim();
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(formState));
+    formData[name] = value;
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(formData));
 });
 
 
@@ -35,15 +35,15 @@ formElem.addEventListener('input', e => {
 formElem.addEventListener('submit', e => {
   e.preventDefault();
 
-  if (formState.email === '' || formState.message === '') {
+  if (formData.email.trim() === '' || formData.message.trim() === '') {
     alert('Fill please all fields');
     return;
   }
 
-  console.log(formState);
+  console.log(formData);
 
   localStorage.removeItem(STORAGE_KEY);
-    formState = { email: '', message: '' };
+    formData = { email: '', message: '' };
     formElem.reset();
 });
 
